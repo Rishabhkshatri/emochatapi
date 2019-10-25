@@ -50,7 +50,7 @@ app.use((req,res,next)=>{
   next();
 });
 
-const con = require('./connection.js').MYSQL_CON;
+const con = require('./connection.js').PG_CON;
 app.use(cookieParser());
 app.use((req,res,next)=>{
   if(req.cookies.jwt !== undefined){
