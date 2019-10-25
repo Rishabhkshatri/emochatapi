@@ -34,6 +34,8 @@ app.use((req,res,next)=>{
   var allowedOrigins = ['http://localhost:3000','https://emochatapi.herokuapp.com'];
 	var origin = req.headers.origin;
   console.log(allowedOrigins);
+  console.log(origin);
+  console.log(allowedOrigins.indexOf(origin));
 	if(allowedOrigins.indexOf(origin) > -1){
      res.setHeader('Access-Control-Allow-Origin', origin);
 	}
