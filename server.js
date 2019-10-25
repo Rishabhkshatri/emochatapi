@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 var http = require('http').createServer(app);
 const io = require('socket.io')(http);
 require('./api/apiConfig');
