@@ -31,7 +31,7 @@ const routes = require('./routes');
 
 app.use((req,res,next)=>{
   // Website you wish to allow to connect
-  var allowedOrigins = ['http://localhost:3000','https://emochatapi.herokuapp.com'];
+  var allowedOrigins = ['http://localhost:3000','https://emchat.herokuapp.com'];
 	var origin = req.headers.origin;
   console.log(allowedOrigins);
   console.log(origin);
