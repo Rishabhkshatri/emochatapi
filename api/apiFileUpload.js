@@ -11,6 +11,7 @@ exports.fileUpload = (req,res)=>{
 	}else{
 		req_data['write_file'].single('file')(req, res, function (err) {
 			if(err){
+				console.log(err);
 				is_valid = false;
 		    }
 
@@ -39,7 +40,7 @@ exports.fileUpload = (req,res)=>{
 					}
 				});
 			}else{
-				res_obj = {api_err : "Incorrect data",page_name : "LogIn"};
+				res_obj = {api_err : "Incorrect data1",page_name : "LogIn"};
 				res.json(res_obj);
 				res.end();
 			}
