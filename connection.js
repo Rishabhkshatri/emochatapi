@@ -3,8 +3,12 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: true
 });
+console.log(pool);
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err)
+})
 
-exports.PG_CON = pool;
+exports.PG_POOL = pool;
 
 // const mysql = require('mysql');
 /*con = mysql.createConnection({

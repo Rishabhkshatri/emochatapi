@@ -33,9 +33,7 @@ app.use((req,res,next)=>{
   // Website you wish to allow to connect
   var allowedOrigins = ['http://localhost:3000','https://emchat.herokuapp.com'];
 	var origin = req.headers.origin;
-  console.log(allowedOrigins);
-  console.log(origin);
-  console.log(allowedOrigins.indexOf(origin));
+  
 	if(allowedOrigins.indexOf(origin) > -1){
      res.setHeader('Access-Control-Allow-Origin', origin);
 	}
@@ -53,9 +51,10 @@ app.use((req,res,next)=>{
   next();
 });
 
-const con = require('./connection.js').PG_CON;
+const con = require('./connection.js').PG_POOL;
 app.use(cookieParser());
 app.use((req,res,next)=>{
+  req.pool = con;
   if(req.cookies.jwt !== undefined){
     jwt.verify(req.cookies.jwt,SECRET_KEY,{audience:"jwt_"+process.env.TS},(err,user_obj)=>{
       if(err){

@@ -1,5 +1,6 @@
 exports.getChats = (req,res)=>{
 	let req_data = req.body;
+	let con = req.pool;
 	let res_obj;
 	is_valid = true;
 	if(req_data['ser_user_id'] === undefined){
@@ -13,6 +14,7 @@ exports.getChats = (req,res)=>{
 			if(err){
 				res_obj = {api_err : "Server Error",page_name : "LogIn"};
 			}else{
+				sql_res = sql_res.rows;
 				res_obj = {api_err : "",page_name : "Chat",data:{view : "chat_detail",pre_chat:sql_res}};
 			}
 			res.json(res_obj);

@@ -1,6 +1,7 @@
 exports.profileSettings = (req,res)=>{ 
 	let req_data = req.body;
 	let res_obj;
+	let con = req.pool;
 	let is_valid = true;
 
 	if(req_data['ser_user_id'] === undefined){
@@ -30,6 +31,7 @@ exports.profileSettings = (req,res)=>{
 exports.getProfile = (req,res)=>{ 
 	let req_data = req.body;
 	let res_obj;
+	let con = req.pool;
 	let is_valid = true;
 
 	if(req_data['ser_user_id'] === undefined){
@@ -42,6 +44,7 @@ exports.getProfile = (req,res)=>{
 			if(err){
 				res_obj = {api_err : "Something went wrong",page_name : ""};
 			}else{
+				sql_res = sql_res.rows;
 				res_obj = {api_err : "",page_name : "", show_video_all : sql_res[0]['show_video_all']};
 			}
 			res.json(res_obj);

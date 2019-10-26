@@ -3,6 +3,7 @@ const SECRET_KEY = "EMOCHAT_SECRET_KEY";
 
 exports.logInCheck = (req,res)=>{
 	let req_data = req.body;
+	let con = req.pool;
 	let res_obj;
 	is_valid = true;
 
@@ -28,6 +29,7 @@ exports.logInCheck = (req,res)=>{
 				res.json(res_obj);
 				res.end();
 			}else{
+				sql_res = sql_res.rows;
 				if(sql_res.length == 1){
 					let user_obj = {user_id : sql_res[0]['user_id'],user_u_name : sql_res[0]['user_u_name']};
 					jwt.sign(user_obj,SECRET_KEY,{expiresIn: 60 * 60,audience:"jwt_"+process.env.TS},(err,token)=>{

@@ -18,11 +18,11 @@ exports.sendMsg = (req,res)=>{
 			if(toneAnalysis.result.document_tone.tones.length !== 0)
 				req_data['tone_id'] = toneAnalysis.result.document_tone.tones[0].tone_id;
 
-	      	insertInDB(req_data,res);
+	      	insertInDB(req_data,req,res);
 	    })
 	    .catch(err => {
 	    	req_data['tone_id'] = ""; 
-	    	insertInDB(req_data,res);
+	    	insertInDB(req_data,req,res);
 	    });
 	    
 	}else{
@@ -32,17 +32,19 @@ exports.sendMsg = (req,res)=>{
 	}
 }
 
-var insertInDB = (req_data,res)=>{
+var insertInDB = (req_data,req,res)=>{
 	let res_obj;
-	let insert_user = `INSERT INTO temo_chat (s_user_id,r_user_id,message,message_tone) VALUES ('${req_data['ser_user_id']}','${req_data['r_user_id']}','${req_data['msg_text']}','${req_data['tone_id']}')`;
+	let con = req.pool;
+	let insert_user = `INSERT INTO temo_chat (s_user_id,r_user_id,message,message_tone) VALUES ('${req_data['ser_user_id']}','${req_data['r_user_id']}','${req_data['msg_text']}','${req_data['tone_id']}') RETURNING *`;
 	con.query(insert_user,(err,sql_res)=>{
 		if(err){
 			res_obj = {api_err : "Server Error",page_name : "LogIn"};
 			res.json(res_obj);
 			res.end();
 		}else{
+			sql_res = sql_res.rows[0];
 			msg_obj = {
-				chat_id : sql_res.insertId,
+				chat_id : sql_res.chat_id,
 				s_user_id : parseInt(req_data['ser_user_id']),
 				r_user_id : parseInt(req_data['r_user_id']),
 				message : req_data['msg_text'],

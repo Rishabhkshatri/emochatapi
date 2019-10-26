@@ -1,5 +1,6 @@
 exports.registration = (req,res)=>{ 
 	let req_data = req.body;
+	let con = req.pool;
 	let res_obj;
 	let is_valid = true;
 	if(req_data.user.length === 0){
