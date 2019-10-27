@@ -16,7 +16,7 @@ exports.registration = (req,res)=>{
 		let insert_user = `INSERT INTO temo_user (user_name, user_u_name, user_email, user_password) VALUES ('${req_data['name']}','${req_data['user']}','${req_data['email']}','${req_data['password']}')`;
 		con.query(insert_user,(err,sql_res)=>{
 			if(err){
-				if(err.code === "ER_DUP_ENTRY"){
+				if(err.constraint === "temo_user_user_u_name_key"){
 					res_obj = {api_err : "User Name already exists",page_name : ""};
 				}else{
 					res_obj = {api_err : "Something went wrong",page_name : ""};

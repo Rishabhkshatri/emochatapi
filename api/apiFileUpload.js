@@ -11,7 +11,6 @@ exports.fileUpload = (req,res)=>{
 	}else{
 		req_data['write_file'].single('file')(req, res, function (err) {
 			if(err){
-				console.log(err);
 				is_valid = false;
 		    }
 
