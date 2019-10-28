@@ -13,8 +13,8 @@ exports.registration = (req,res)=>{
 		is_valid = false;
 	}
 	if(is_valid){
-		let insert_user = `INSERT INTO temo_user (user_name, user_u_name, user_email, user_password) VALUES ('${req_data['name']}','${req_data['user']}','${req_data['email']}','${req_data['password']}')`;
-		con.query(insert_user,(err,sql_res)=>{
+		let insert_user = `INSERT INTO temo_user (user_name, user_u_name, user_email, user_password) VALUES ($1,$2,$3,$4)`;
+		con.query(insert_user,[req_data['name'],req_data['user'],req_data['email'],req_data['password']],(err,sql_res)=>{
 			if(err){
 				if(err.constraint === "temo_user_user_u_name_key"){
 					res_obj = {api_err : "User Name already exists",page_name : ""};

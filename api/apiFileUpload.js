@@ -1,4 +1,4 @@
-var u_socket = require('./resource.js');
+var u_socket = require('../require/socket.js');
 exports.fileUpload = (req,res)=>{
 	let req_data = req.body;
 	let con = req.pool;
@@ -6,10 +6,10 @@ exports.fileUpload = (req,res)=>{
 	is_valid = true;
 	if(req_data['ser_user_id'] === undefined){
 		is_valid = false;
-	}else if(req_data['write_file'] === undefined){
+	}else if(req.write_file === undefined){
 		is_valid = false;
 	}else{
-		req_data['write_file'].single('file')(req, res, function (err) {
+		req.write_file.single('file')(req, res, function (err) {
 			if(err){
 				is_valid = false;
 		    }
@@ -19,8 +19,8 @@ exports.fileUpload = (req,res)=>{
 			}
 
 			if(is_valid){
-				let insert_user = `INSERT INTO temo_video (user_id,video_name) VALUES ('${req_data['ser_user_id']}','${req.file.filename}') RETURNING *`;
-				con.query(insert_user,(err,sql_res)=>{
+				let insert_user = `INSERT INTO temo_video (user_id,video_name) VALUES ($1,$2) RETURNING *`;
+				con.query(insert_user,[req_data['ser_user_id'],req.file.filename],(err,sql_res)=>{
 					if(err){
 						res_obj = {api_err : "Server Error",page_name : "LogIn"};
 						res.json(res_obj);

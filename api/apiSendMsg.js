@@ -1,6 +1,7 @@
 var getChats = require('./apiGetChats');
-var u_socket = require('./resource.js');
+var u_socket = require('../require/socket.js');
 var tokenAnalyzer = require('./apiToneAnalyzer');
+
 exports.sendMsg = (req,res)=>{
 	let req_data = req.body;
 	let con = req.pool;
@@ -15,8 +16,8 @@ exports.sendMsg = (req,res)=>{
 	}
 
 	if(is_valid){
-		let insert_user = `INSERT INTO temo_chat (s_user_id,r_user_id,message,message_tone) VALUES ('${req_data['ser_user_id']}','${req_data['r_user_id']}','${req_data['msg_text']}','${req_data['tone_id']}') RETURNING *`;
-		con.query(insert_user,(err,sql_res)=>{
+		let insert_user = `INSERT INTO temo_chat (s_user_id,r_user_id,message) VALUES ($1,$2,$3) RETURNING *`;
+		con.query(insert_user,[req_data['ser_user_id'],req_data['r_user_id'],req_data['msg_text']],(err,sql_res)=>{
 			if(err){
 				res_obj = {api_err : "Server Error",page_name : "LogIn"};
 				res.json(res_obj);
@@ -30,7 +31,6 @@ exports.sendMsg = (req,res)=>{
 					message : req_data['msg_text']
 				};
 				tokenAnalyzer.tokenAnalyzer(con,msg_obj);
-				console.log('abc');
 				u_socket.SEvents.emit("newMsg",req_data['ser_user_id'],msg_obj);
 				u_socket.SEvents.emit("newMsg",req_data['r_user_id'],msg_obj);
 				res.json({api_err : ""});
